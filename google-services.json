@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "419546251333",
+    "project_id": "fusion-tips",
+    "storage_bucket": "fusion-tips.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:419546251333:android:1c581d017a6512afcda32c",
+        "android_client_info": {
+          "package_name": "com.d3vi.fusiontips"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAysfMuAa9yPlOkIgKhP0Qe4eHHVNIjjLo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
