@@ -7,12 +7,7 @@ import {
   Alert,
 } from "react-native";
 import { useEffect, useState } from "react";
-import {
-  darkblack,
-  whitecolor,
-  lightGreen,
-  yellowColor,
-} from "@/src/constants/Colors";
+import { whitecolor, lightGreen, yellowColor } from "@/src/constants/Colors";
 import { ScrollView } from "react-native-gesture-handler";
 import { TextInput } from "react-native-paper";
 import PrimaryButton from "@/src/components/button/PrimaryButton";
@@ -58,11 +53,6 @@ const PostOdd = () => {
       newErrors.odds = "Please enter a valid odds number";
     }
 
-    // Check if match is not in the past
-    // if (dateTime && dateTime < new Date()) {
-    //   newErrors.dateTime = "Match date cannot be in the past";
-    // }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -71,7 +61,7 @@ const PostOdd = () => {
     if (!validateForm()) {
       Alert.alert(
         "Validation Error",
-        "Please fill in all required fields correctly"
+        "Please fill in all required fields correctly",
       );
       return;
     }
@@ -323,7 +313,7 @@ const PostOdd = () => {
               </View>
 
               <View style={styles.inputContainer}>
-                <Text style={styles.inputLabel}>📅 Match Date & Time *</Text>
+                <Text style={styles.inputLabel}>Match Date & Time *</Text>
                 <DateTimeInput
                   setTimeOfPlay={setTimeOfPlay}
                   label="Select match start time"
@@ -335,22 +325,6 @@ const PostOdd = () => {
                 {errors.dateTime && (
                   <Text style={styles.errorText}>{errors.dateTime}</Text>
                 )}
-              </View>
-
-              {/* Optional Tip 2 */}
-              <View style={styles.inputContainer}>
-                <Text style={styles.inputLabel}>Additional Tip (Optional)</Text>
-                <TextInput
-                  mode="outlined"
-                  outlineStyle={styles.inputOutline}
-                  style={styles.input}
-                  placeholder="e.g. Correct Score, Double Chance"
-                  placeholderTextColor="#999"
-                  contentStyle={styles.inputContent}
-                  autoCapitalize="sentences"
-                  value={tip2}
-                  onChangeText={(text) => setTip2(text)}
-                />
               </View>
             </View>
           </View>
@@ -365,8 +339,8 @@ const PostOdd = () => {
             >
               <Text style={styles.statusText}>
                 {isFormValid
-                  ? "✅ Form is ready to submit"
-                  : "⚠️ Please complete all required fields"}
+                  ? "Form is ready to submit"
+                  : "Please complete all required fields"}
               </Text>
             </View>
           </View>
@@ -396,7 +370,7 @@ export default PostOdd;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: darkblack,
+    backgroundColor: "#000",
     paddingBottom: 100,
   },
   keyboardView: {

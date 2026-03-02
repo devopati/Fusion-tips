@@ -7,18 +7,12 @@ export const SubscriptionsConstants = {
   FIFTY_PLUS_DAILY_ODDS: "50_plus",
   ULTIMATE_SPECIAL_VIP: "ultimate_special_vip",
   ALL_COMBINED_TIPS: "all_combined",
-
-  // NEW
-  SUPREME_CORRECT_SCORES: "supreme_correct_scores",
-  ELITE_HT_FT_VIP: "elite_ht_ft",
-  SURE_DRAWS_VIP: "sure_draws",
-  CS_HT_FT_COMBO: "cs_ht_ft_combo",
-  ALL_COMBINATIONS_VIP: "all_combinations_vip",
 };
 
 export const FreeTipsConstants = {
   TWO_PLUS_DAILY: "2_plus_daily_free_tips",
-  SINGLE_BRAVE: "single_brave _tip",
+  OVER_UNDER: "over_under",
+  TIP_OF_THE_DAY: "tip_of_the_day",
 };
 
 export const subscribedIdentifiers = {
@@ -28,11 +22,4 @@ export const subscribedIdentifiers = {
   OVER_UNDER: "ultra-over-under",
   FIFTY_PLUS: "ultra-50",
   ALL_COMBINED_TIPS: "all-combined",
-
-  // NEW
-  SUPREME_CORRECT_SCORES: "supreme-correct-scores",
-  ELITE_HT_FT_VIP: "elite-ht-ft",
-  SURE_DRAWS_VIP: "sure-draws",
-  CS_HT_FT_COMBO: "cs-ht-ft-combo",
-  ALL_COMBINATIONS_VIP: "all-combinations-vip",
 };

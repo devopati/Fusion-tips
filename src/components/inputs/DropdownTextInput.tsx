@@ -45,16 +45,13 @@ const DropdownTextInput: React.FC<PropTypes> = ({
       <Dropdown
         style={[
           styles.dropdown,
-          isFocus && { borderColor: PrimaryColor },
+          isFocus && { borderColor: "#000" },
           error && { borderColor: "rgba(0,0,0,0.05)" },
         ]}
-        placeholderStyle={[
-          styles.placeholderStyle,
-          error && { color: PrimaryColor },
-        ]}
+        placeholderStyle={[styles.placeholderStyle, error && { color: "#000" }]}
         selectedTextStyle={styles.selectedTextStyle}
         inputSearchStyle={styles.inputSearchStyle}
-        iconStyle={[styles.iconStyle, error && { tintColor: PrimaryColor }]}
+        iconStyle={[styles.iconStyle, error && { tintColor: "#000" }]}
         data={dropDownData}
         search
         maxHeight={300}
@@ -73,7 +70,7 @@ const DropdownTextInput: React.FC<PropTypes> = ({
           setIsFocus(false);
           onValueChange(item);
         }}
-        containerStyle={{ backgroundColor: PrimaryColor }}
+        containerStyle={{ backgroundColor: "#000" }}
         itemTextStyle={{ color: whitecolor, fontWeight: "bold" }}
       />
     </View>
@@ -94,7 +91,7 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderRadius: 8,
     paddingHorizontal: 8,
-    backgroundColor: PrimaryColor,
+    backgroundColor: "#000",
     color: whitecolor,
   },
   icon: {

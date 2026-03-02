@@ -7,7 +7,7 @@ import { BottomSheetModal } from "@gorhom/bottom-sheet";
 
 const AdminHome = () => {
   return (
-    <View style={{ flex: 1, backgroundColor: darkblack }}>
+    <View style={{ flex: 1, backgroundColor: "#000" }}>
       <AdminTopNavigationBanner />
       <AdminTopTabs />
       {/* <Text>AdminHome</Text> */}

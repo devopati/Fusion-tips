@@ -1,4 +1,9 @@
-import { darkGreen, PrimaryColor, whitecolor } from "@/src/constants/Colors";
+import {
+  darkblack,
+  darkGreen,
+  PrimaryColor,
+  whitecolor,
+} from "@/src/constants/Colors";
 import * as React from "react";
 import {
   Alert,
@@ -75,7 +80,7 @@ const AdminLoginModal = ({ visible, setVisible }: AdminLoginModalProps) => {
             <TextInput
               style={styles.input}
               placeholder="Username"
-              placeholderTextColor="#D9D9D9"
+              placeholderTextColor="#7a7777"
               autoCapitalize="sentences"
               value={username}
               onChangeText={(text) => setUsername(text)}
@@ -86,7 +91,7 @@ const AdminLoginModal = ({ visible, setVisible }: AdminLoginModalProps) => {
             <TextInput
               style={styles.input}
               placeholder="Password"
-              placeholderTextColor="#D9D9D9"
+              placeholderTextColor="#7a7777"
               secureTextEntry
               value={password}
               onChangeText={(text) => setPassword(text)}
@@ -125,14 +130,15 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
   },
   innercontainer: {
-    backgroundColor: PrimaryColor,
-    padding: 20,
+    backgroundColor: darkblack,
+    padding: 24,
     width: Dimensions.get("window").width - 30,
     gap: 20,
+    borderRadius: 14,
   },
   input: {
-    backgroundColor: PrimaryColor,
-    color: whitecolor,
+    backgroundColor: "#D9D9D9",
+    color: "#000",
     fontWeight: "bold",
     borderWidth: 0.7,
     borderRadius: 7,

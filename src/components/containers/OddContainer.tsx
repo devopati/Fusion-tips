@@ -1,52 +1,67 @@
-import React from "react";
+import React, { useRef } from "react";
 import {
   GestureResponderEvent,
   Pressable,
   StyleSheet,
   Text,
   View,
+  Animated,
 } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
 import { OddsType } from "@/src/types/types";
 import { getLocalizedDate } from "@/src/utils/get-localized-date";
-
-/* -------------------------------------------------------------------------- */
-/*                                   Types                                    */
-/* -------------------------------------------------------------------------- */
 
 interface OddContainerProps {
   onPress?: (e: GestureResponderEvent) => void;
   data: OddsType;
   hide?: boolean;
-  /** "pending" | "won" | "lost" — controls badge style and card border */
   status?: "pending" | "won" | "lost";
-  /** e.g. "4-1" — renders the green Final Score banner */
   finalScore?: string;
 }
 
-/* -------------------------------------------------------------------------- */
-/*                                   Colors                                   */
-/* -------------------------------------------------------------------------- */
+// ─── Terminal Palette ─────────────────────────────────────────────────────────
+const T = {
+  bg: "#05080F",
+  paper: "#080D17",
+  grid: "#0B1220",
+  gridLine: "#111E30",
+  ink: "#C8D8EE",
+  dim: "#2E4560",
+  softDim: "#3A5070",
 
-const CARD_BG = "#162236"; // dark navy card background
-const INSET_BG = "#1C2F47"; // slightly darker inset for prediction box
-const GOLD_BG = "#2B2000"; // very dark gold tint for odds badge bg
-const GOLD = "#F5C842"; // bright gold for odds text & icon
-const WHITE = "#FFFFFF";
-const MUTED = "#8A9BB0"; // muted blue-gray for league / VS / labels
-const TEAL = "#2ECC71"; // WON badge & score value
-const TEAL_BG = "#1E6B47"; // Final Score banner bg (green)
-const BLUE_PILL = "#2563EB"; // PENDING badge bg
-const BORDER_TEAL = "#2ECC71"; // WON card border
-const BORDER_BLUE = "#2563EB"; // PENDING card border
-const BORDER_RED = "#EF4444"; // LOST card border
-const PREDICTION_BLUE = "#3B9EF5"; // "Home Win" prediction value color
+  won: "#00E5A0",
+  lost: "#FF3B5C",
+  pending: "#F59E0B",
+  wonDim: "#001810",
+  lostDim: "#1A0008",
+  pendingDim: "#180E00",
 
-/* -------------------------------------------------------------------------- */
-/*                                 Component                                  */
-/* -------------------------------------------------------------------------- */
+  gold: "#F59E0B",
+  goldDim: "#140C00",
+  cyan: "#38BDF8",
+};
+
+const STATUS_MAP = {
+  won: {
+    color: "#00E5A0",
+    dim: "#001810",
+    label: "WIN",
+    icon: "checkmark-sharp" as const,
+  },
+  lost: {
+    color: "#FF3B5C",
+    dim: "#1A0008",
+    label: "LOSS",
+    icon: "close" as const,
+  },
+  pending: {
+    color: "#F59E0B",
+    dim: "#180E00",
+    label: "LIVE",
+    icon: "radio-button-on" as const,
+  },
+};
 
 const OddContainer = ({
   onPress,
@@ -55,286 +70,279 @@ const OddContainer = ({
   status = "pending",
   finalScore,
 }: OddContainerProps) => {
-  const isWon = status === "won";
-  const isLost = status === "lost";
-  const isPending = status === "pending";
+  const scale = useRef(new Animated.Value(1)).current;
+  const onIn = () =>
+    Animated.spring(scale, {
+      toValue: 0.982,
+      useNativeDriver: true,
+      speed: 70,
+    }).start();
+  const onOut = () =>
+    Animated.spring(scale, {
+      toValue: 1,
+      useNativeDriver: true,
+      speed: 70,
+    }).start();
 
-  const cardBorderColor = isWon
-    ? BORDER_TEAL
-    : isLost
-      ? BORDER_RED
-      : BORDER_BLUE;
+  const s = STATUS_MAP[status];
 
   return (
-    <Pressable
-      style={[styles.container, { borderColor: cardBorderColor }]}
-      onPress={onPress}
-    >
-      {/* ── Top Row: Date | Status Badge | Odds Badge ── */}
-      <View style={styles.topRow}>
-        {/* Date with calendar icon */}
-        <View style={styles.dateRow}>
-          <MaterialCommunityIcons
-            name="calendar-month-outline"
-            size={14}
-            color={MUTED}
-          />
-          <Text style={styles.dateText}>
-            {data.date_of_play
-              ? getLocalizedDate(Number(data.date_of_play))
-              : "—"}
-          </Text>
-        </View>
+    <Pressable onPress={onPress} onPressIn={onIn} onPressOut={pressOut}>
+      <Animated.View style={[styles.card, { transform: [{ scale }] }]}>
+        {/* Left accent bar */}
+        <View style={[styles.bar, { backgroundColor: s.color }]} />
 
-        {/* Status Badge */}
-        {isLost && (
-          <View style={[styles.statusBadge, { backgroundColor: BORDER_RED }]}>
-            <Ionicons name="close" size={12} color={WHITE} />
-            <Text style={styles.statusText}>LOST</Text>
+        <View style={styles.body}>
+          {/* ── Meta: league · date · odds ── */}
+          <View style={styles.metaRow}>
+            <Text style={styles.league} numberOfLines={1}>
+              {(data.league_name ?? "LEAGUE").toUpperCase()}
+            </Text>
+            <View style={styles.metaRight}>
+              <Text style={styles.dateText}>
+                {data.date_of_play
+                  ? getLocalizedDate(Number(data.date_of_play))
+                  : "—"}
+              </Text>
+              <View style={styles.oddsChip}>
+                <Text style={styles.oddsTag}>ODD</Text>
+                <Text style={styles.oddsNum}>{hide ? "—" : data.odds}</Text>
+              </View>
+            </View>
           </View>
-        )}
-        {isWon && (
-          <View style={[styles.statusBadge, { backgroundColor: TEAL }]}>
-            <Ionicons name="checkmark" size={12} color={WHITE} />
-            <Text style={styles.statusText}>WON</Text>
-          </View>
-        )}
-        {isPending && (
-          <View style={[styles.statusBadge, { backgroundColor: BLUE_PILL }]}>
-            <Ionicons name="time-outline" size={12} color={WHITE} />
-            <Text style={styles.statusText}>PENDING</Text>
-          </View>
-        )}
 
-        {/* Odds Badge */}
-        <View style={styles.oddsBadge}>
-          <MaterialCommunityIcons name="trending-up" size={14} color={GOLD} />
-          <Text style={styles.oddsText}>{hide ? "VIP" : data.odds}</Text>
-        </View>
-      </View>
-
-      {/* ── League Name ── */}
-      <Text style={styles.leagueText} numberOfLines={1}>
-        {data.league_name}
-      </Text>
-
-      {/* ── Teams Row ── */}
-      <View style={styles.teamsRow}>
-        <Text
-          style={styles.teamLeft}
-          numberOfLines={1}
-          allowFontScaling={false}
-        >
-          {data.team1_name}
-        </Text>
-        <Text style={styles.vs}>VS</Text>
-        <Text
-          style={styles.teamRight}
-          numberOfLines={1}
-          allowFontScaling={false}
-        >
-          {data.team2_name}
-        </Text>
-      </View>
-
-      {/* ── Prediction Box ── */}
-      <View style={styles.predictionBox}>
-        {hide ? (
-          <View style={styles.lockRow}>
-            <Ionicons name="lock-closed" size={13} color={GOLD} />
-            <Text style={styles.lockText}>Premium</Text>
-          </View>
-        ) : (
-          <Text style={styles.predictionText} allowFontScaling={false}>
-            <Text style={styles.predictionLabel}>Prediction: </Text>
-            <Text style={styles.predictionValue}>{data.tip1}</Text>
-          </Text>
-        )}
-      </View>
-
-      {/* ── Final Score Banner ── */}
-      {finalScore && (
-        <View
-          style={[
-            styles.finalScoreBox,
-            { backgroundColor: isLost ? "#6B1E1E" : TEAL_BG },
-          ]}
-        >
-          <Text style={styles.finalScoreText} allowFontScaling={false}>
-            <Text style={styles.finalScoreLabel}>Final Score: </Text>
+          {/* ── Match: team1 · dot · team2 ── */}
+          <View style={styles.matchRow}>
+            <Text style={styles.team} numberOfLines={1}>
+              {data.team1_name}
+            </Text>
+            <View style={[styles.pulse, { backgroundColor: s.color }]} />
             <Text
+              style={[styles.team, { textAlign: "right" }]}
+              numberOfLines={1}
+            >
+              {data.team2_name}
+            </Text>
+          </View>
+
+          {/* ── Prediction strip ── */}
+          <View style={styles.predStrip}>
+            {hide ? (
+              <>
+                <Ionicons name="lock-closed-sharp" size={11} color={T.gold} />
+                <Text style={styles.lockText}>PREMIUM · UNLOCK TO VIEW</Text>
+              </>
+            ) : (
+              <>
+                <Text style={styles.predKey}>PICK</Text>
+                <View style={styles.predDivider} />
+                <Text style={styles.predVal}>{data.tip1}</Text>
+              </>
+            )}
+          </View>
+
+          {/* ── Footer: status + final score ── */}
+          <View style={styles.footer}>
+            <View
               style={[
-                styles.finalScoreValue,
-                { color: isLost ? BORDER_RED : TEAL },
+                styles.pill,
+                { backgroundColor: s.dim, borderColor: s.color + "50" },
               ]}
             >
-              {finalScore}
-            </Text>
-          </Text>
+              <Ionicons name={s.icon} size={9} color={s.color} />
+              <Text style={[styles.pillText, { color: s.color }]}>
+                {s.label}
+              </Text>
+            </View>
+
+            {finalScore && (
+              <View
+                style={[
+                  styles.pill,
+                  {
+                    backgroundColor: status === "lost" ? T.lostDim : T.wonDim,
+                    borderColor: (status === "lost" ? T.lost : T.won) + "50",
+                  },
+                ]}
+              >
+                <Text style={styles.ftTag}>FT</Text>
+                <Text
+                  style={[
+                    styles.pillText,
+                    { color: status === "lost" ? T.lost : T.won },
+                  ]}
+                >
+                  {finalScore}
+                </Text>
+              </View>
+            )}
+          </View>
         </View>
-      )}
+      </Animated.View>
     </Pressable>
   );
+
+  function pressOut() {
+    Animated.spring(scale, {
+      toValue: 1,
+      useNativeDriver: true,
+      speed: 70,
+    }).start();
+  }
 };
 
 export default OddContainer;
 
-/* -------------------------------------------------------------------------- */
-/*                                   Styles                                   */
-/* -------------------------------------------------------------------------- */
-
 const styles = StyleSheet.create({
-  /* Card */
-  container: {
-    backgroundColor: CARD_BG,
-    borderRadius: 12,
+  card: {
+    flexDirection: "row",
+    backgroundColor: T.paper,
+    borderRadius: 10,
+    marginBottom: 10,
+    overflow: "hidden",
+    borderWidth: 1,
+    borderColor: T.gridLine,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.45,
+    shadowRadius: 14,
+    elevation: 7,
+  },
+  bar: {
+    width: 3,
+  },
+  body: {
+    flex: 1,
     paddingHorizontal: 14,
-    paddingTop: 12,
-    paddingBottom: 12,
-    marginBottom: 14,
-    borderWidth: 1.5,
+    paddingVertical: 13,
+    gap: 10,
   },
 
-  /* ── Top Row ── */
-  topRow: {
+  // Meta
+  metaRow: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: 10,
   },
-  dateRow: {
+  league: {
+    fontSize: 10,
+    fontWeight: "700",
+    color: T.softDim,
+    letterSpacing: 2,
+    flexShrink: 1,
+    marginRight: 8,
+  },
+  metaRight: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 5,
+    gap: 8,
   },
   dateText: {
-    fontSize: 13,
-    fontWeight: "500",
-    color: MUTED,
+    fontSize: 11,
+    color: T.dim,
+    fontVariant: ["tabular-nums"],
   },
-
-  /* Status Badge */
-  statusBadge: {
+  oddsChip: {
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "baseline",
     gap: 5,
-    paddingHorizontal: 13,
-    paddingVertical: 5,
-    borderRadius: 20,
-  },
-  statusText: {
-    fontSize: 12,
-    fontWeight: "700",
-    color: WHITE,
-    letterSpacing: 0.3,
-  },
-
-  /* Odds Badge */
-  oddsBadge: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 5,
-    backgroundColor: GOLD_BG,
-    paddingHorizontal: 11,
-    paddingVertical: 5,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: `${GOLD}50`,
-  },
-  oddsText: {
-    fontSize: 15,
-    fontWeight: "800",
-    color: GOLD,
-  },
-
-  /* ── League ── */
-  leagueText: {
-    fontSize: 12,
-    color: MUTED,
-    fontWeight: "400",
-    marginBottom: 6,
-  },
-
-  /* ── Teams ── */
-  teamsRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginBottom: 10,
-  },
-  teamLeft: {
-    flex: 1,
-    fontSize: 16,
-    fontWeight: "700",
-    color: WHITE,
-    textAlign: "left",
-  },
-  vs: {
-    fontSize: 12,
-    fontWeight: "600",
-    color: MUTED,
+    backgroundColor: T.goldDim,
+    borderRadius: 6,
     paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderWidth: 1,
+    borderColor: T.gold + "55",
   },
-  teamRight: {
-    flex: 1,
+  oddsTag: {
+    fontSize: 9,
+    fontWeight: "800",
+    color: T.dim,
+    letterSpacing: 1.5,
+  },
+  oddsNum: {
     fontSize: 16,
-    fontWeight: "700",
-    color: WHITE,
-    textAlign: "right",
+    fontWeight: "900",
+    color: T.gold,
+    fontVariant: ["tabular-nums"],
   },
 
-  /* ── Prediction Box ── */
-  predictionBox: {
-    backgroundColor: INSET_BG,
-    borderRadius: 8,
-    paddingVertical: 11,
-    paddingHorizontal: 14,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  predictionText: {
-    textAlign: "center",
-  },
-  predictionLabel: {
-    fontSize: 14,
-    color: MUTED,
-    fontWeight: "400",
-  },
-  predictionValue: {
-    fontSize: 14,
-    fontWeight: "700",
-    color: PREDICTION_BLUE,
-  },
-  lockRow: {
+  // Match
+  matchRow: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 6,
+    gap: 12,
+  },
+  team: {
+    flex: 1,
+    fontSize: 17,
+    fontWeight: "800",
+    color: T.ink,
+    letterSpacing: -0.4,
+  },
+  pulse: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+  },
+
+  // Prediction
+  predStrip: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    backgroundColor: T.grid,
+    borderRadius: 7,
+    paddingVertical: 9,
+    paddingHorizontal: 13,
+  },
+  predKey: {
+    fontSize: 10,
+    fontWeight: "800",
+    color: T.softDim,
+    letterSpacing: 2,
+  },
+  predDivider: {
+    width: 1,
+    height: 13,
+    backgroundColor: T.dim,
+  },
+  predVal: {
+    fontSize: 13,
+    fontWeight: "700",
+    color: T.cyan,
   },
   lockText: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: GOLD,
+    fontSize: 10,
+    fontWeight: "700",
+    color: T.gold,
+    letterSpacing: 1.5,
+    marginLeft: 6,
   },
 
-  /* ── Final Score Banner ── */
-  finalScoreBox: {
-    marginTop: 8,
-    borderRadius: 8,
-    paddingVertical: 11,
-    paddingHorizontal: 14,
+  // Footer
+  footer: {
+    flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
+    gap: 8,
   },
-  finalScoreText: {
-    textAlign: "center",
+  pill: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 5,
+    paddingHorizontal: 9,
+    paddingVertical: 4,
+    borderRadius: 5,
+    borderWidth: 1,
   },
-  finalScoreLabel: {
-    fontSize: 14,
-    color: MUTED,
-    fontWeight: "400",
-  },
-  finalScoreValue: {
-    fontSize: 14,
+  pillText: {
+    fontSize: 10,
     fontWeight: "800",
+    letterSpacing: 1.5,
+  },
+  ftTag: {
+    fontSize: 9,
+    fontWeight: "700",
+    color: T.softDim,
+    letterSpacing: 1.5,
   },
 });

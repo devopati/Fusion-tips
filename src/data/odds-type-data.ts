@@ -43,13 +43,13 @@ export const OddsTypesData = [
   },
   {
     // ultra free tips
-    label: "FREE Single Brave Tip",
-    value: `free-${FreeTipsConstants.SINGLE_BRAVE}`,
+    label: "Over/UnderTip",
+    value: `free-${FreeTipsConstants.OVER_UNDER}`,
   },
-  // {
-  //   label: "Post Correct Scores Home History",
-  //   value: `free-${FreeTipsConstants.POSTED_CORRECT_SCORES}`,
-  // },
+  {
+    label: "Tip of The Day",
+    value: `free-${FreeTipsConstants.TIP_OF_THE_DAY}`,
+  },
   // {
   //   label: "Post HT/FT Home History",
   //   value: `free-${FreeTipsConstants.POSTED_HT_FT}`,

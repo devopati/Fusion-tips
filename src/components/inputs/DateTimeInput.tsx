@@ -1,9 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { View, Platform, StyleSheet, TouchableOpacity } from "react-native";
-import DateTimePicker, {
-  DateTimePickerAndroid,
-  DateTimePickerEvent,
-} from "@react-native-community/datetimepicker";
+import React, { useState } from "react";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
+import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import BlankTextInput from "./BlankTextInput";
 import { getLocalizedDate } from "@/src/utils/get-localized-date";
 import { getLocalizedTime } from "@/src/utils/get-localized-time";

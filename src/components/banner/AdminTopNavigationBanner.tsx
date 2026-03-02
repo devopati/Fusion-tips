@@ -39,7 +39,7 @@ export default AdminTopNavigationBanner;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: darkblack,
+    backgroundColor: "#000",
     paddingVertical: 18,
     paddingHorizontal: 10,
     flexDirection: "row",

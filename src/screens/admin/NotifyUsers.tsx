@@ -52,7 +52,7 @@ const NotifyUsers = () => {
 
       try {
         const tokens = await fetchAllNotificationTokens(
-          userType === "vip" ? true : userType === "free" ? false : undefined
+          userType === "vip" ? true : userType === "free" ? false : undefined,
         );
         setEstimatedUsers(tokens.length);
       } catch (error) {
@@ -88,7 +88,7 @@ const NotifyUsers = () => {
     if (!validateForm()) {
       Alert.alert(
         "Validation Error",
-        "Please fix the form errors before sending"
+        "Please fix the form errors before sending",
       );
       return;
     }
@@ -98,8 +98,8 @@ const NotifyUsers = () => {
       userType === "vip"
         ? "VIP users"
         : userType === "free"
-        ? "Free users"
-        : "All users";
+          ? "Free users"
+          : "All users";
 
     Alert.alert(
       "Send Notification",
@@ -116,8 +116,8 @@ const NotifyUsers = () => {
                 userType === "vip"
                   ? true
                   : userType === "free"
-                  ? false
-                  : undefined
+                    ? false
+                    : undefined,
               );
               const tokens = allTokens.map((token) => token.token);
 
@@ -131,27 +131,27 @@ const NotifyUsers = () => {
                 if (Platform.OS === "android") {
                   ToastAndroid.show(
                     "Notification sent successfully!",
-                    ToastAndroid.SHORT
+                    ToastAndroid.SHORT,
                   );
                 }
                 navigation.goBack();
               } else {
                 Alert.alert(
                   "No Recipients",
-                  "No users found for the selected user type"
+                  "No users found for the selected user type",
                 );
               }
             } catch (error) {
               Alert.alert(
                 "Error",
-                "Failed to send notification. Please try again."
+                "Failed to send notification. Please try again.",
               );
             } finally {
               setLoading(false);
             }
           },
         },
-      ]
+      ],
     );
   };
 
@@ -337,7 +337,7 @@ export default NotifyUsers;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: darkblack,
+    backgroundColor: "#000",
   },
   keyboardView: {
     flex: 1,

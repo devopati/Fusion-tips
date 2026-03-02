@@ -7,7 +7,7 @@ import AdminNavigation from "./AdminNavigation";
 
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import FaqScreen from "../screens/user/FaqScreen";
-import { PrimaryColor } from "../constants/Colors";
+import { darkblack, PrimaryColor } from "../constants/Colors";
 
 const Drawer = createDrawerNavigator();
 
@@ -24,7 +24,7 @@ function UserDrawer() {
         drawerLabelStyle: {
           color: "#fff",
         },
-        drawerActiveBackgroundColor: PrimaryColor,
+        drawerActiveBackgroundColor: darkblack,
         drawerPosition: "right",
         headerTintColor: "#fff",
       }}
@@ -47,9 +47,9 @@ const MainNavigation = () => {
       <Stack.Screen
         name={UserScreenNames.DRAWER}
         options={{
-          title: "Supreme Scores",
+          title: "Fusion Tips",
         }}
-        component={UserDrawer}
+        component={UserNavigation}
       />
       <Stack.Screen name={AdminScreenNames.ADMIN} component={AdminNavigation} />
     </Stack.Navigator>

@@ -13,130 +13,133 @@ import SubscriptionList from "../screens/user/SubscriptionList";
 import VipPaidOdds from "../screens/user/screens/VipPaidOdds";
 import Settings from "../screens/user/Settings";
 import FreeOddsDisplay from "../screens/user/screens/FreeOddsDisplay";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Stack = createNativeStackNavigator();
 
 const UserNavigation = () => {
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}
-    >
-      <Stack.Screen
-        name={UserScreenNames.HOME}
-        component={Home}
-        options={{
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#000" }} edges={["top"]}>
+      <Stack.Navigator
+        screenOptions={{
           headerShown: false,
         }}
-      />
-      <Stack.Screen
-        name={UserScreenNames.HISTORY}
-        component={History}
-        options={{
-          headerStyle: {
-            backgroundColor: PrimaryColor,
-          },
-          headerTitleStyle: {
-            color: whitecolor,
-            fontWeight: "bold",
-          },
-        }}
-      />
-      <Stack.Screen
-        name={UserScreenNames.FAQS}
-        component={FaqScreen}
-        options={{
-          headerStyle: {
-            backgroundColor: PrimaryColor,
-          },
-          headerTitleStyle: {
-            color: whitecolor,
-            fontWeight: "bold",
-          },
-        }}
-      />
+      >
+        <Stack.Screen
+          name={UserScreenNames.HOME}
+          component={Home}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name={UserScreenNames.HISTORY}
+          component={History}
+          options={{
+            headerStyle: {
+              backgroundColor: PrimaryColor,
+            },
+            headerTitleStyle: {
+              color: whitecolor,
+              fontWeight: "bold",
+            },
+          }}
+        />
+        <Stack.Screen
+          name={UserScreenNames.FAQS}
+          component={FaqScreen}
+          options={{
+            headerStyle: {
+              backgroundColor: PrimaryColor,
+            },
+            headerTitleStyle: {
+              color: whitecolor,
+              fontWeight: "bold",
+            },
+          }}
+        />
 
-      <Stack.Screen
-        name={UserScreenNames.SETTINGS}
-        component={Settings}
-        options={{
-          headerStyle: {
-            backgroundColor: PrimaryColor,
-          },
-          headerTitleStyle: {
-            color: whitecolor,
-            fontWeight: "bold",
-          },
-        }}
-      />
+        <Stack.Screen
+          name={UserScreenNames.SETTINGS}
+          component={Settings}
+          options={{
+            headerStyle: {
+              backgroundColor: PrimaryColor,
+            },
+            headerTitleStyle: {
+              color: whitecolor,
+              fontWeight: "bold",
+            },
+          }}
+        />
 
-      <Stack.Screen
-        name={UserScreenNames.PRIVACY_POLICY}
-        component={PrivacyPolicyScreen}
-        options={{
-          headerStyle: {
-            backgroundColor: PrimaryColor,
-          },
-          headerTitleStyle: {
-            color: whitecolor,
-            fontWeight: "bold",
-          },
-        }}
-      />
-      <Stack.Screen
-        name={UserScreenNames.UPGRADE_PLAN}
-        component={UpgradePlan}
-        options={{
-          headerStyle: {
-            backgroundColor: PrimaryColor,
-          },
-          headerTitleStyle: {
-            color: whitecolor,
-            fontWeight: "bold",
-          },
-        }}
-      />
-      <Stack.Screen
-        name={UserScreenNames.SUBSCRIPTION_LIST}
-        component={SubscriptionList}
-        options={{
-          headerStyle: {
-            backgroundColor: PrimaryColor,
-          },
-          headerTitleStyle: {
-            color: whitecolor,
-            fontWeight: "bold",
-          },
-        }}
-      />
-      <Stack.Screen
-        name={UserScreenNames.PAID_ODDS_SCREEN}
-        component={VipPaidOdds}
-        options={{
-          headerStyle: {
-            backgroundColor: PrimaryColor,
-          },
-          headerTitleStyle: {
-            color: whitecolor,
-            fontWeight: "bold",
-          },
-        }}
-      />
-      <Stack.Screen
-        name={UserScreenNames.FREE_ODDS_SCREEN}
-        component={FreeOddsDisplay}
-        options={{
-          headerStyle: {
-            backgroundColor: PrimaryColor,
-          },
-          headerTitleStyle: {
-            color: whitecolor,
-            fontWeight: "bold",
-          },
-        }}
-      />
-    </Stack.Navigator>
+        <Stack.Screen
+          name={UserScreenNames.PRIVACY_POLICY}
+          component={PrivacyPolicyScreen}
+          options={{
+            headerStyle: {
+              backgroundColor: PrimaryColor,
+            },
+            headerTitleStyle: {
+              color: whitecolor,
+              fontWeight: "bold",
+            },
+          }}
+        />
+        <Stack.Screen
+          name={UserScreenNames.UPGRADE_PLAN}
+          component={UpgradePlan}
+          options={{
+            headerStyle: {
+              backgroundColor: PrimaryColor,
+            },
+            headerTitleStyle: {
+              color: whitecolor,
+              fontWeight: "bold",
+            },
+          }}
+        />
+        <Stack.Screen
+          name={UserScreenNames.SUBSCRIPTION_LIST}
+          component={SubscriptionList}
+          options={{
+            headerStyle: {
+              backgroundColor: PrimaryColor,
+            },
+            headerTitleStyle: {
+              color: whitecolor,
+              fontWeight: "bold",
+            },
+          }}
+        />
+        <Stack.Screen
+          name={UserScreenNames.PAID_ODDS_SCREEN}
+          component={VipPaidOdds}
+          options={{
+            headerStyle: {
+              backgroundColor: PrimaryColor,
+            },
+            headerTitleStyle: {
+              color: whitecolor,
+              fontWeight: "bold",
+            },
+          }}
+        />
+        <Stack.Screen
+          name={UserScreenNames.FREE_ODDS_SCREEN}
+          component={FreeOddsDisplay}
+          options={{
+            headerStyle: {
+              backgroundColor: PrimaryColor,
+            },
+            headerTitleStyle: {
+              color: whitecolor,
+              fontWeight: "bold",
+            },
+          }}
+        />
+      </Stack.Navigator>
+    </SafeAreaView>
   );
 };
 

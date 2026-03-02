@@ -32,7 +32,7 @@ const AdminNavigation = () => {
         component={PostOdd}
         options={{
           headerStyle: {
-            // backgroundColor: PrimaryColor,
+            backgroundColor: "#000",
           },
           headerTitleStyle: {
             color: whitecolor,
@@ -45,7 +45,7 @@ const AdminNavigation = () => {
         component={EditOdd}
         options={{
           headerStyle: {
-            // backgroundColor: PrimaryColor,
+            backgroundColor: "#000",
           },
           headerTitleStyle: {
             color: whitecolor,
@@ -58,7 +58,7 @@ const AdminNavigation = () => {
         component={AdminFreeOdds}
         options={{
           headerStyle: {
-            backgroundColor: PrimaryColor,
+            backgroundColor: "#000",
           },
           headerTitleStyle: {
             color: whitecolor,
@@ -71,7 +71,7 @@ const AdminNavigation = () => {
         component={AdminVipOdds}
         options={{
           headerStyle: {
-            backgroundColor: PrimaryColor,
+            backgroundColor: "#000",
           },
           headerTitleStyle: {
             color: whitecolor,
@@ -84,7 +84,7 @@ const AdminNavigation = () => {
         component={NotifyUsers}
         options={{
           headerStyle: {
-            backgroundColor: PrimaryColor,
+            backgroundColor: "#000",
           },
           headerTitleStyle: {
             color: whitecolor,

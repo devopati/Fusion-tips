@@ -11,8 +11,12 @@ const freeIdentifiersData = [
     key: FreeTipsConstants.TWO_PLUS_DAILY,
   },
   {
-    title: "Single Brave Tip",
-    key: FreeTipsConstants.SINGLE_BRAVE,
+    title: "Tip of the Day",
+    key: FreeTipsConstants.TIP_OF_THE_DAY,
+  },
+  {
+    title: "Two Plus Daily",
+    key: FreeTipsConstants.TWO_PLUS_DAILY,
   },
 ];
 
@@ -44,7 +48,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 1,
-    backgroundColor: darkblack,
+    backgroundColor: "#000",
   },
   flatlist: {
     justifyContent: "center",

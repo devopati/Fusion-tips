@@ -9,7 +9,7 @@ export const AdminScreenNames = {
 };
 
 export const UserScreenNames = {
-  USER: "Supreme Scores",
+  USER: "Fusion Tips",
   HOME: "Home",
   HISTORY: "History",
   UPGRADE_PLAN: "Upgrade Plan",

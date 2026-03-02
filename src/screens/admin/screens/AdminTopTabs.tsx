@@ -1,17 +1,9 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet } from "react-native";
 import React from "react";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import {
-  darkblack,
-  PrimaryColor,
-  whitecolor,
-  yellowColor,
-} from "@/src/constants/Colors";
-import AdminFreeOdds from "./AdminFreeOdds";
-import AdminVipOdds from "./AdminVipOdds";
+import { whitecolor, yellowColor } from "@/src/constants/Colors";
 import AdminHistoryScreen from "./AdminHistoryScreen";
 import FreeOddsTopTab from "./FreeOddsTopTab";
-import VipTopTab from "./VipTopTab";
 
 const Tab = createMaterialTopTabNavigator();
 

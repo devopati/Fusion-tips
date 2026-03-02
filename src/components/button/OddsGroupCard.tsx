@@ -1,3 +1,4 @@
+import React, { useRef } from "react";
 import {
   GestureResponderEvent,
   StyleProp,
@@ -8,34 +9,33 @@ import {
   Pressable,
   View,
   ActivityIndicator,
+  Animated,
+  Dimensions,
 } from "react-native";
-import { whitecolor, yellowColor, PrimaryColor } from "@/src/constants/Colors";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 
-/* -------------------------------------------------------------------------- */
-/*                                   Colors                                   */
-/* -------------------------------------------------------------------------- */
-
-const CARD_BG_FREE = "#152035"; // dark navy for free cards
-const CARD_BG_VIP = "#0F1A2B"; // slightly deeper navy for VIP cards
-const ICON_BG_FREE = "#1E3A6E"; // blue circle bg for free icons
-const ICON_BG_VIP = yellowColor; // gold circle bg for VIP icons
-const FREE_BADGE_BG = "#2563EB"; // blue pill for FREE badge
-const VIP_BADGE_BG = "#2A2000"; // dark gold pill for VIP badge
-const GOLD_BORDER = yellowColor;
-
-/* -------------------------------------------------------------------------- */
-/*                                   Types                                    */
-/* -------------------------------------------------------------------------- */
+// ─── Tokens ──────────────────────────────────────────────────────────────────
+const T = {
+  paper: "#080D17",
+  gridLine: "#111E30",
+  grid: "#0B1220",
+  ink: "#C8D8EE",
+  dim: "#2E4560",
+  softDim: "#3A5070",
+  accent: "#F59E0B", // amber — free
+  accentDim: "#140C00",
+  vipGold: "#FFD166", // brighter gold for VIP
+  vipDim: "#1A1100",
+  cyan: "#38BDF8",
+  cyanDim: "#051520",
+};
 
 interface OddsGroupCardProps {
   title: string;
   onPress?: (e: GestureResponderEvent) => void;
   btnStyle?: StyleProp<ViewStyle>;
   titleStyle?: StyleProp<TextStyle>;
-  buttonColor?: string;
   loading?: boolean;
   selected?: boolean;
   icon?: string;
@@ -44,258 +44,194 @@ interface OddsGroupCardProps {
   vip?: boolean;
 }
 
-/* -------------------------------------------------------------------------- */
-/*                                 Component                                  */
-/* -------------------------------------------------------------------------- */
-
 const OddsGroupCard = ({
   title,
   onPress,
   btnStyle,
   titleStyle,
   loading,
-  selected = false,
   icon,
   count,
-  subscribed,
   vip = false,
 }: OddsGroupCardProps) => {
-  const isVip = vip;
+  const scale = useRef(new Animated.Value(1)).current;
+  const onIn = () =>
+    Animated.spring(scale, {
+      toValue: 0.96,
+      useNativeDriver: true,
+      speed: 60,
+    }).start();
+  const onOut = () =>
+    Animated.spring(scale, {
+      toValue: 1,
+      useNativeDriver: true,
+      speed: 60,
+    }).start();
 
-  const getIconName = (): string => {
-    if (icon) return icon;
+  const resolveIcon = () => {
+    const k = icon ?? "";
     const t = title.toLowerCase();
-    if (t.includes("daily") || t.includes("today")) return "today";
-    if (t.includes("over") || t.includes("under")) return "trending-up";
-    if (t.includes("vip") || t.includes("premium")) return "star";
-    if (t.includes("live")) return "timer";
-    if (t.includes("winner") || t.includes("champion")) return "trophy";
-    if (t.includes("btts")) return "trophy";
-    return "sports-soccer";
+    if (vip)
+      return <Ionicons name="lock-closed-sharp" size={20} color={T.vipGold} />;
+    if (k === "today" || t.includes("daily"))
+      return <MaterialIcons name="adjust" size={20} color={T.cyan} />;
+    if (k === "trending-up" || t.includes("over"))
+      return <MaterialIcons name="trending-up" size={20} color={T.cyan} />;
+    if (k === "star" || t.includes("vip"))
+      return <Ionicons name="star" size={20} color={T.cyan} />;
+    if (k === "timer" || t.includes("live"))
+      return <MaterialIcons name="timer" size={20} color={T.cyan} />;
+    if (k === "trophy" || t.includes("winner"))
+      return <Ionicons name="trophy-outline" size={20} color={T.cyan} />;
+    return <MaterialIcons name="sports-soccer" size={20} color={T.cyan} />;
   };
 
-  const iconName = getIconName();
-  const iconColor = isVip ? PrimaryColor : whitecolor;
-  const iconSize = 32;
-
-  const renderIcon = () => {
-    if (loading) {
-      return (
-        <ActivityIndicator
-          size="small"
-          color={isVip ? PrimaryColor : whitecolor}
-        />
-      );
-    }
-    if (isVip) {
-      // VIP cards show lock icon
-      return (
-        <Ionicons name="lock-closed" size={iconSize} color={PrimaryColor} />
-      );
-    }
-    switch (iconName) {
-      case "today":
-        return (
-          <MaterialIcons name="adjust" size={iconSize} color={iconColor} />
-        );
-      case "trending-up":
-        return (
-          <MaterialIcons name="trending-up" size={iconSize} color={iconColor} />
-        );
-      case "star":
-        return <Ionicons name="star" size={iconSize} color={iconColor} />;
-      case "timer":
-        return <MaterialIcons name="timer" size={iconSize} color={iconColor} />;
-      case "trophy":
-        return (
-          <Ionicons name="trophy-outline" size={iconSize} color={iconColor} />
-        );
-      case "sports-soccer":
-        return (
-          <MaterialIcons
-            name="sports-soccer"
-            size={iconSize}
-            color={iconColor}
-          />
-        );
-      default:
-        return (
-          <Ionicons name="trophy-outline" size={iconSize} color={iconColor} />
-        );
-    }
-  };
+  const accentColor = vip ? T.vipGold : T.cyan;
+  const accentDim = vip ? T.vipDim : T.cyanDim;
+  const badgeLabel = vip ? "VIP" : "FREE";
 
   return (
-    <Pressable
-      onPress={onPress}
-      style={[
-        styles.container,
-        isVip ? styles.vipContainer : styles.freeContainer,
-        btnStyle,
-      ]}
-      android_ripple={{
-        color: isVip ? yellowColor : `${whitecolor}20`,
-        borderless: false,
-      }}
-    >
-      {/* Badge: FREE or VIP — top right */}
-      <View style={[styles.badge, isVip ? styles.vipBadge : styles.freeBadge]}>
-        {isVip && (
-          <Ionicons
-            name="star"
-            size={10}
-            color={yellowColor}
-            style={{ marginRight: 3 }}
-          />
-        )}
-        <Text style={[styles.badgeText, isVip && styles.vipBadgeText]}>
-          {isVip ? "VIP" : "FREE"}
-        </Text>
-      </View>
-
-      {/* Icon Circle */}
-      <View
+    <Pressable onPress={onPress} onPressIn={onIn} onPressOut={onOut}>
+      <Animated.View
         style={[
-          styles.iconCircle,
-          isVip ? styles.iconCircleVip : styles.iconCircleFree,
+          styles.card,
+          { borderColor: accentColor + "30" },
+          btnStyle,
+          { transform: [{ scale }] },
         ]}
       >
-        {renderIcon()}
-      </View>
+        {/* Top bar — colored accent line */}
+        <View style={[styles.topBar, { backgroundColor: accentColor }]} />
 
-      {/* VIP watermark text */}
-      {isVip && (
-        <Text style={styles.watermark} numberOfLines={1}>
-          VIP Odds
-        </Text>
-      )}
+        <View style={styles.inner}>
+          {/* Icon */}
+          <View style={[styles.iconBox, { backgroundColor: accentDim }]}>
+            {loading ? (
+              <ActivityIndicator size="small" color={accentColor} />
+            ) : (
+              resolveIcon()
+            )}
+          </View>
 
-      {/* Title */}
-      <Text
-        allowFontScaling={false}
-        style={[styles.title, isVip && styles.titleVip, titleStyle]}
-        numberOfLines={2}
-      >
-        {title}
-      </Text>
+          {/* Title */}
+          <Text
+            style={[
+              styles.title,
+              { color: vip ? T.vipGold + "CC" : T.ink },
+              titleStyle,
+            ]}
+            numberOfLines={2}
+          >
+            {title.toUpperCase()}
+          </Text>
 
-      {/* Count (optional) */}
-      {count !== undefined && !isVip && (
-        <Text style={styles.countText}>{count} odds</Text>
-      )}
+          {/* Footer row */}
+          <View style={styles.cardFooter}>
+            {count !== undefined && !vip && (
+              <Text style={styles.countText}>{count} PICKS</Text>
+            )}
+            <View
+              style={[
+                styles.badge,
+                { backgroundColor: accentDim, borderColor: accentColor + "40" },
+              ]}
+            >
+              {vip && (
+                <Ionicons
+                  name="star"
+                  size={8}
+                  color={T.vipGold}
+                  style={{ marginRight: 3 }}
+                />
+              )}
+              <Text style={[styles.badgeText, { color: accentColor }]}>
+                {badgeLabel}
+              </Text>
+            </View>
+          </View>
+        </View>
+
+        {/* Corner arrow */}
+        <View style={styles.corner}>
+          <Ionicons
+            name="chevron-forward"
+            size={12}
+            color={accentColor + "80"}
+          />
+        </View>
+      </Animated.View>
     </Pressable>
   );
 };
 
 export default OddsGroupCard;
 
-/* -------------------------------------------------------------------------- */
-/*                                   Styles                                   */
-/* -------------------------------------------------------------------------- */
-
 const styles = StyleSheet.create({
-  container: {
-    borderRadius: 16,
-    marginVertical: 5,
-    overflow: "hidden",
-    width: "48%",
-    paddingHorizontal: 14,
-    paddingTop: 14,
-    paddingBottom: 18,
-    minHeight: 170,
-    position: "relative",
-    // shadow
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    elevation: 5,
-  },
-  freeContainer: {
-    backgroundColor: CARD_BG_FREE,
-    borderWidth: 0,
-  },
-  vipContainer: {
-    backgroundColor: CARD_BG_VIP,
-    borderWidth: 1.5,
-    borderColor: GOLD_BORDER,
-  },
-
-  /* Badge */
-  badge: {
-    position: "absolute",
-    top: 10,
-    right: 10,
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 20,
-  },
-  freeBadge: {
-    backgroundColor: FREE_BADGE_BG,
-  },
-  vipBadge: {
-    backgroundColor: VIP_BADGE_BG,
+  card: {
+    width: Dimensions.get("window").width / 2 - 20,
+    backgroundColor: T.paper,
+    borderRadius: 10,
     borderWidth: 1,
-    borderColor: `${yellowColor}60`,
+    overflow: "hidden",
+    minHeight: 155,
+    marginVertical: 5,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.4,
+    shadowRadius: 12,
+    elevation: 6,
   },
-  badgeText: {
-    fontSize: 11,
-    fontWeight: "700",
-    color: whitecolor,
-    letterSpacing: 0.3,
+  topBar: {
+    height: 2,
+    width: "100%",
   },
-  vipBadgeText: {
-    color: yellowColor,
+  inner: {
+    padding: 14,
+    flex: 1,
+    gap: 10,
   },
-
-  /* Icon Circle */
-  iconCircle: {
-    width: 72,
-    height: 72,
-    borderRadius: 36,
+  iconBox: {
+    width: 40,
+    height: 40,
+    borderRadius: 8,
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 14,
-    marginTop: 4,
   },
-  iconCircleFree: {
-    backgroundColor: ICON_BG_FREE,
-  },
-  iconCircleVip: {
-    backgroundColor: yellowColor,
-  },
-
-  /* Watermark */
-  watermark: {
-    position: "absolute",
-    bottom: 44,
-    left: 14,
-    right: 14,
-    fontSize: 22,
-    fontWeight: "800",
-    color: `${yellowColor}25`,
-    letterSpacing: 1,
-  },
-
-  /* Title */
   title: {
-    fontSize: 16,
-    fontWeight: "700",
-    color: whitecolor,
-    lineHeight: 22,
-    marginTop: 2,
-  },
-  titleVip: {
-    color: `${yellowColor}99`, // muted gold when VIP / locked
-  },
-
-  /* Count */
-  countText: {
     fontSize: 12,
-    fontWeight: "500",
-    color: `${whitecolor}60`,
-    marginTop: 2,
+    fontWeight: "800",
+    letterSpacing: 1.2,
+    lineHeight: 18,
+    flex: 1,
+  },
+  cardFooter: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginTop: "auto",
+  },
+  countText: {
+    fontSize: 9,
+    fontWeight: "700",
+    color: T.dim,
+    letterSpacing: 1.5,
+  },
+  badge: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 4,
+    borderWidth: 1,
+  },
+  badgeText: {
+    fontSize: 9,
+    fontWeight: "800",
+    letterSpacing: 1.5,
+  },
+  corner: {
+    position: "absolute",
+    bottom: 10,
+    right: 10,
   },
 });

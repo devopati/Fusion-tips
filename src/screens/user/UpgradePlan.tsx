@@ -174,7 +174,7 @@ const UpgradePlan = ({ route }: { route: { params: { type: string } } }) => {
           <Text style={styles.supportText} allowFontScaling={false}>
             Need help? Contact us at:{" "}
             <Text style={styles.emailText} selectable dataDetectorType="email">
-              info@supremescores.com
+              tradeaxishub@gmail.com
             </Text>
           </Text>
         </View>

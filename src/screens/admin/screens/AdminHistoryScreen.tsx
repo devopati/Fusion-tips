@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
-import { darkblack, PrimaryColor, whitecolor } from "@/src/constants/Colors";
+import { PrimaryColor, whitecolor } from "@/src/constants/Colors";
 import { FlatList, RefreshControl } from "react-native-gesture-handler";
 import OddHistoryContainer from "@/src/components/containers/OddHistoryContainer";
 import useFirebaseFirestore from "../../hooks/useFirebaseFirestore";
@@ -49,12 +49,7 @@ const AdminHistoryScreen = () => {
         visible={deleteActive}
         setVisible={setDeleteActive}
       />
-      {/* <DeleteModal
-        visible={deleteActive}
-        setVisible={setDeleteActive}
-        data={currOdd}
-        refresh={getOddsHistoryHandler}
-      /> */}
+
       <View style={styles.detailview}>
         <Text allowFontScaling={false} style={styles.text}>
           Odds History
@@ -88,7 +83,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 1,
-    backgroundColor: darkblack,
+    backgroundColor: "#000",
     paddingTop: 10,
   },
   detailview: {
