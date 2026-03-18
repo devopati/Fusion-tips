@@ -13,6 +13,7 @@ import { useAppSelector } from "@/redux/hooks/reduxHooks";
 import useRevenueCatSDKHook from "../../hooks/useRevenueCatSDKHook";
 import OddsGroupCard from "@/src/components/button/OddsGroupCard";
 import { Button } from "react-native-paper";
+import * as WebBrowser from "expo-web-browser";
 
 const C = {
   screen: "#F4F6FB",
@@ -44,8 +45,8 @@ const OddsDisplayScreen = () => {
     navigation.navigate(UserScreenNames.UPGRADE_PLAN, { type: odd_type });
   };
 
-  const isSubscribed = (type: string) =>
-    activePlans.filter((p) => p.split(":")[1].includes(type)).length > 0;
+  // const isSubscribed = (type: string) =>
+  //   activePlans.filter((p) => p.split(":")[1].includes(type)).length > 0;
 
   useEffect(() => {
     if (activePlans.length === 0) getCurrentCustomerActiveSubs();
@@ -98,12 +99,16 @@ const OddsDisplayScreen = () => {
         <View style={styles.divider} />
 
         <View style={styles.buttons}>
-          {/* <Button
-            onPress={() => navigation.navigate(UserScreenNames.PRIVACY_POLICY)}
+          <Button
+            onPress={async () => {
+              await WebBrowser.openBrowserAsync(
+                "https://www.freeprivacypolicy.com/live/a7f5d85b-7867-4589-9803-6721aaade292",
+              );
+            }}
             labelStyle={styles.link}
           >
             Privacy & Policy
-          </Button> */}
+          </Button>
           <Button
             onPress={() => navigation.navigate(UserScreenNames.FAQS)}
             labelStyle={styles.link}
