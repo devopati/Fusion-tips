@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
 
   // Section
   section: {
-    paddingHorizontal: 16,
+    paddingHorizontal: 9,
     paddingTop: 22,
   },
   sectionHead: {
@@ -187,9 +187,10 @@ const styles = StyleSheet.create({
   // Grid
   grid: {
     flexDirection: "row",
+    justifyContent: "center",
+    gap: 10,
+    alignItems: "center",
     flexWrap: "wrap",
-    justifyContent: "space-between",
-    gap: 5,
   },
 
   divider: {
